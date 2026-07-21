@@ -1,11 +1,49 @@
-export default function App() {
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { AuthProvider, useAuth } from "./AuthContext";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import ProtectedRoute from "./components/ProtectedRoute";
+
+function NavBar() {
+  const { user, logout } = useAuth();
+
+  return (
+    <header className="header">
+      <h1 className="logo">
+        <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
+          📝 PaperProof
+        </Link>
+      </h1>
+      <nav className="nav-links">
+        {user ? (
+          <>
+            <Link to="/dashboard" className="nav-link">
+              Dashboard
+            </Link>
+            <span className="nav-user">{user.email}</span>
+            <button onClick={logout} className="nav-link nav-btn">
+              Log Out
+            </button>
+          </>
+        ) : (
+          <>
+            <Link to="/login" className="nav-link">
+              Log In
+            </Link>
+            <Link to="/signup" className="btn-primary btn-sm">
+              Sign Up
+            </Link>
+          </>
+        )}
+      </nav>
+    </header>
+  );
+}
+
+function LandingPage() {
   return (
     <div className="landing">
-      <header className="header">
-        <h1 className="logo">📝 PaperProof</h1>
-        <p className="tagline">Polish your essays before submission</p>
-      </header>
-
+      <NavBar />
       <main className="hero">
         <div className="hero-card">
           <h2>AI-Powered Proofreading &amp; Plagiarism Detection</h2>
@@ -31,11 +69,11 @@ export default function App() {
           </div>
 
           <div className="cta">
-            <button className="btn-primary" disabled>
-              Coming Soon — Sign Up
-            </button>
+            <Link to="/signup" className="btn-primary">
+              Get Started — Sign Up Free
+            </Link>
             <p className="cta-note">
-              We're launching soon. Student plans start at $8/month.
+              Student plans start at $8/month. No credit card required for free tier.
             </p>
           </div>
         </div>
@@ -45,5 +83,73 @@ export default function App() {
         <p>&copy; 2026 PaperProof. Built for students.</p>
       </footer>
     </div>
+  );
+}
+
+function DashboardPage() {
+  const { user } = useAuth();
+  return (
+    <div className="landing">
+      <NavBar />
+      <main className="hero">
+        <div className="hero-card">
+          <h2>Welcome, {user?.email}!</h2>
+          <p className="hero-desc">
+            Your PaperProof dashboard is coming soon. You'll be able to
+            upload essays, run proofreading checks, and scan for plagiarism
+            — all from here.
+          </p>
+          <p className="cta-note">Stay tuned for the next update.</p>
+        </div>
+      </main>
+      <footer className="footer">
+        <p>&copy; 2026 PaperProof. Built for students.</p>
+      </footer>
+    </div>
+  );
+}
+
+function AuthLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="landing">
+      <NavBar />
+      {children}
+    </div>
+  );
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <AuthProvider>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route
+            path="/login"
+            element={
+              <AuthLayout>
+                <Login />
+              </AuthLayout>
+            }
+          />
+          <Route
+            path="/signup"
+            element={
+              <AuthLayout>
+                <Signup />
+              </AuthLayout>
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <DashboardPage />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </AuthProvider>
+    </BrowserRouter>
   );
 }

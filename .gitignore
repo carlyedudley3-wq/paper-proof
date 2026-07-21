@@ -5,3 +5,6 @@ dist/
 .DS_Store
 frontend/dist/
 *.tsbuildinfo
+*.db
+*.db-wal
+*.db-shm
