@@ -25,4 +25,29 @@ db.run(`
   CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
 `);
 
+// Create essays table
+db.run(`
+  CREATE TABLE IF NOT EXISTS essays (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    title TEXT NOT NULL DEFAULT '',
+    content TEXT NOT NULL DEFAULT '',
+    word_count INTEGER NOT NULL DEFAULT 0,
+    status TEXT NOT NULL DEFAULT 'draft',
+    created_at TEXT NOT NULL DEFAULT (datetime('now')),
+    updated_at TEXT NOT NULL DEFAULT (datetime('now')),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+  );
+`);
+
+// Create index on user_id for fast per-user queries
+db.run(`
+  CREATE INDEX IF NOT EXISTS idx_essays_user_id ON essays(user_id);
+`);
+
+// Create index on created_at for monthly tier counting
+db.run(`
+  CREATE INDEX IF NOT EXISTS idx_essays_user_created ON essays(user_id, created_at);
+`);
+
 export default db;

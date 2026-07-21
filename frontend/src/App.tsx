@@ -2,6 +2,9 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import { AuthProvider, useAuth } from "./AuthContext";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import Dashboard from "./pages/Dashboard";
+import NewEssay from "./pages/NewEssay";
+import EssayDetail from "./pages/EssayDetail";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function NavBar() {
@@ -86,29 +89,6 @@ function LandingPage() {
   );
 }
 
-function DashboardPage() {
-  const { user } = useAuth();
-  return (
-    <div className="landing">
-      <NavBar />
-      <main className="hero">
-        <div className="hero-card">
-          <h2>Welcome, {user?.email}!</h2>
-          <p className="hero-desc">
-            Your PaperProof dashboard is coming soon. You'll be able to
-            upload essays, run proofreading checks, and scan for plagiarism
-            — all from here.
-          </p>
-          <p className="cta-note">Stay tuned for the next update.</p>
-        </div>
-      </main>
-      <footer className="footer">
-        <p>&copy; 2026 PaperProof. Built for students.</p>
-      </footer>
-    </div>
-  );
-}
-
 function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="landing">
@@ -144,7 +124,41 @@ export default function App() {
             path="/dashboard"
             element={
               <ProtectedRoute>
-                <DashboardPage />
+                <>
+                  <NavBar />
+                  <Dashboard />
+                  <footer className="footer">
+                    <p>&copy; 2026 PaperProof. Built for students.</p>
+                  </footer>
+                </>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/essays/new"
+            element={
+              <ProtectedRoute>
+                <>
+                  <NavBar />
+                  <NewEssay />
+                  <footer className="footer">
+                    <p>&copy; 2026 PaperProof. Built for students.</p>
+                  </footer>
+                </>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/essays/:id"
+            element={
+              <ProtectedRoute>
+                <>
+                  <NavBar />
+                  <EssayDetail />
+                  <footer className="footer">
+                    <p>&copy; 2026 PaperProof. Built for students.</p>
+                  </footer>
+                </>
               </ProtectedRoute>
             }
           />
