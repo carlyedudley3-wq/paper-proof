@@ -604,3 +604,157 @@ body {
   justify-content: flex-end;
   gap: 0.75rem;
 }
+
+/* --- Proofread UI --- */
+.proofread-loading-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 10px;
+  padding: 0.85rem 1.25rem;
+  margin-bottom: 1.25rem;
+  font-size: 0.9rem;
+  color: #1e40af;
+}
+
+.proofread-spinner-large {
+  font-size: 1.3rem;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.proofread-spinner {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.btn-loading {
+  opacity: 0.8;
+  cursor: wait;
+}
+
+.essay-paragraph-block {
+  margin-bottom: 1.75rem;
+}
+
+.essay-paragraph {
+  margin-bottom: 0.75rem;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.proofread-highlight {
+  transition: background-color 0.2s;
+}
+
+.proofread-highlight:hover {
+  filter: brightness(0.95);
+}
+
+.proofread-applied {
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
+.proofread-suggestions {
+  margin-top: 0.5rem;
+  margin-left: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.proofread-suggestion {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-left: 3px solid #2563eb;
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  transition: opacity 0.2s;
+}
+
+.suggestion-applied {
+  opacity: 0.6;
+  border-left-color: #94a3b8;
+}
+
+.suggestion-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.4rem;
+}
+
+.suggestion-type-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.suggestion-original {
+  font-size: 0.9rem;
+  color: #ef4444;
+  text-decoration: line-through;
+  font-style: italic;
+}
+
+.suggestion-arrow {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.suggestion-corrected {
+  font-size: 0.9rem;
+  color: #16a34a;
+  font-weight: 500;
+}
+
+.suggestion-explanation {
+  font-size: 0.82rem;
+  color: #64748b;
+  line-height: 1.5;
+  margin: 0.35rem 0 0.5rem 0;
+}
+
+.btn-apply {
+  display: inline-block;
+  padding: 0.3rem 0.85rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #2563eb;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-apply:hover:not(:disabled) {
+  background: #dbeafe;
+  border-color: #93c5fd;
+}
+
+.btn-apply:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.btn-applied {
+  color: #16a34a;
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+}

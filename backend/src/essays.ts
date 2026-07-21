@@ -1,8 +1,12 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { requireAuth } from "./auth";
 import db from "./db";
+import proofreadRouter from "./proofread";
 
 const router = Router();
+
+// Mount proofread routes (must be before generic /:id routes)
+router.use(proofreadRouter);
 
 // --- Types ---
 export interface Essay {
@@ -12,6 +16,7 @@ export interface Essay {
   content: string;
   word_count: number;
   status: "draft" | "submitted";
+  proofread_result: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -23,6 +28,7 @@ interface EssayRow {
   content: string;
   word_count: number;
   status: string;
+  proofread_result: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -153,7 +159,16 @@ router.get("/:id", requireAuth, (req: Request, res: Response) => {
       return res.status(404).json({ error: "Essay not found" });
     }
 
-    return res.json({ essay: rowToEssay(essay) });
+    // Parse proofread_result for the response
+    const essayObj = rowToEssay(essay);
+    let proofreadData = null;
+    if (essay.proofread_result) {
+      try {
+        proofreadData = JSON.parse(essay.proofread_result);
+      } catch { /* ignore invalid JSON */ }
+    }
+
+    return res.json({ essay: essayObj, proofread: proofreadData });
   } catch (err) {
     console.error("Get essay error:", err);
     return res.status(500).json({ error: "Internal server error" });

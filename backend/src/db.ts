@@ -50,4 +50,11 @@ db.run(`
   CREATE INDEX IF NOT EXISTS idx_essays_user_created ON essays(user_id, created_at);
 `);
 
+// Add proofread_result column if it doesn't exist (migration)
+try {
+  db.run(`ALTER TABLE essays ADD COLUMN proofread_result TEXT`);
+} catch {
+  // Column already exists — safe to ignore
+}
+
 export default db;
