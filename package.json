@@ -1,0 +1,12 @@
+{
+  "name": "paperproof",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "bun run backend/src/index.ts",
+    "build:frontend": "cd frontend && bun run build",
+    "start": "bun run backend/src/index.ts",
+    "publish": "bash ./publish.sh"
+  }
+}
