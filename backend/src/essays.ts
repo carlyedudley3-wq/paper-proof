@@ -17,6 +17,7 @@ export interface Essay {
   word_count: number;
   status: "draft" | "submitted";
   proofread_result: string | null;
+  plagiarism_result: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -29,6 +30,7 @@ interface EssayRow {
   word_count: number;
   status: string;
   proofread_result: string | null;
+  plagiarism_result: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -168,7 +170,15 @@ router.get("/:id", requireAuth, (req: Request, res: Response) => {
       } catch { /* ignore invalid JSON */ }
     }
 
-    return res.json({ essay: essayObj, proofread: proofreadData });
+    // Parse plagiarism_result for the response
+    let plagiarismData = null;
+    if (essay.plagiarism_result) {
+      try {
+        plagiarismData = JSON.parse(essay.plagiarism_result);
+      } catch { /* ignore invalid JSON */ }
+    }
+
+    return res.json({ essay: essayObj, proofread: proofreadData, plagiarism: plagiarismData });
   } catch (err) {
     console.error("Get essay error:", err);
     return res.status(500).json({ error: "Internal server error" });

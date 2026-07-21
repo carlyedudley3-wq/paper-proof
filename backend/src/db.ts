@@ -57,4 +57,11 @@ try {
   // Column already exists — safe to ignore
 }
 
+// Add plagiarism_result column if it doesn't exist (migration)
+try {
+  db.run(`ALTER TABLE essays ADD COLUMN plagiarism_result TEXT`);
+} catch {
+  // Column already exists — safe to ignore
+}
+
 export default db;
