@@ -64,4 +64,15 @@ try {
   // Column already exists — safe to ignore
 }
 
+// Add subscription columns to users table (migration)
+try {
+  db.run(`ALTER TABLE users ADD COLUMN tier TEXT NOT NULL DEFAULT 'free'`);
+} catch { /* already exists */ }
+try {
+  db.run(`ALTER TABLE users ADD COLUMN papers_remaining INTEGER`);
+} catch { /* already exists */ }
+try {
+  db.run(`ALTER TABLE users ADD COLUMN subscription_expires_at TEXT`);
+} catch { /* already exists */ }
+
 export default db;

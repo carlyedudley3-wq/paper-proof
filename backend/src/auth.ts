@@ -13,6 +13,9 @@ export interface User {
   id: number;
   email: string;
   created_at: string;
+  tier: string;
+  papers_remaining: number | null;
+  subscription_expires_at: string | null;
 }
 
 // Extend Express Request to include user
@@ -87,6 +90,9 @@ router.post("/signup", async (req: Request, res: Response) => {
       id: Number(result.lastInsertRowid),
       email,
       created_at: new Date().toISOString(),
+      tier: "free",
+      papers_remaining: null,
+      subscription_expires_at: null,
     };
 
     const token = generateToken(user);
@@ -108,8 +114,8 @@ router.post("/login", async (req: Request, res: Response) => {
 
     // Find user by email
     const row = db.query(
-      "SELECT id, email, password_hash, created_at FROM users WHERE email = ?"
-    ).get(email) as { id: number; email: string; password_hash: string; created_at: string } | null;
+      "SELECT id, email, password_hash, created_at, tier, papers_remaining, subscription_expires_at FROM users WHERE email = ?"
+    ).get(email) as { id: number; email: string; password_hash: string; created_at: string; tier: string; papers_remaining: number | null; subscription_expires_at: string | null } | null;
 
     if (!row) {
       return res.status(401).json({ error: "Invalid email or password" });
@@ -125,6 +131,9 @@ router.post("/login", async (req: Request, res: Response) => {
       id: row.id,
       email: row.email,
       created_at: row.created_at,
+      tier: row.tier,
+      papers_remaining: row.papers_remaining,
+      subscription_expires_at: row.subscription_expires_at,
     };
 
     const token = generateToken(user);
@@ -139,7 +148,7 @@ router.post("/login", async (req: Request, res: Response) => {
 router.get("/me", requireAuth, async (req: Request, res: Response) => {
   try {
     const row = db.query(
-      "SELECT id, email, created_at FROM users WHERE id = ?"
+      "SELECT id, email, created_at, tier, papers_remaining, subscription_expires_at FROM users WHERE id = ?"
     ).get(req.user!.id) as User | null;
 
     if (!row) {
